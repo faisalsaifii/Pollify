@@ -35,7 +35,7 @@ def repeat_text(ack, body):
                         "options": [
                             {
                                 "text": {"type": "plain_text", "text": "Single Choice"},
-                                "value": "single_choice",
+                                "value": "radio_buttons",
                             },
                             {
                                 "text": {
@@ -43,7 +43,7 @@ def repeat_text(ack, body):
                                     "text": "Multi Choice",
                                     "emoji": True,
                                 },
-                                "value": "multichoice",
+                                "value": "checkboxes",
                             },
                         ],
                         "action_id": "multi_static_select-action",
@@ -59,7 +59,7 @@ def repeat_text(ack, body):
                     "block_id": "question",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "plain_text_input-action",
+                        "action_id": "question-action",
                         "placeholder": {
                             "type": "plain_text",
                             "text": "Enter the question",
@@ -74,7 +74,7 @@ def repeat_text(ack, body):
                     "element": {
                         "type": "plain_text_input",
                         "multiline": True,
-                        "action_id": "plain_text_input-action",
+                        "action_id": "choices-action",
                         "placeholder": {
                             "type": "plain_text",
                             "text": "Enter the choices (Each on new line)",
@@ -83,20 +83,80 @@ def repeat_text(ack, body):
                     },
                     "label": {"type": "plain_text", "text": "Choices"},
                 },
+                {
+                    "type": "section",
+                    "block_id": "channel_id",
+                    "text": {
+                        "type": "plain_text",
+                        "text": body["channel_id"],
+                    },
+                },
             ],
         },
     )
 
 
 @slack_app.view("poll")
-def handle_submission(ack, body):
+def handle_submission(ack, body, say):
     ack()
     values = body["view"]["state"]["values"]
     type = values["type"]["multi_static_select-action"]["selected_option"]["value"]
-    question = values["question"]["plain_text_input-action"]["value"]
-    options = str(values["answer"]["plain_text_input-action"]["value"]).split("\n")
-    slack_web_client.chat_postMessage(
-        text=f"Question: {question}\nAnswer: {options}\nProduct: {type}",
+    question = values["question"]["question-action"]["value"]
+    choices = str(values["choices"]["choices-action"]["value"]).split("\n")
+    blocks = [
+        {
+            "type": "section",
+            "block_id": "poll",
+            "text": {"type": "mrkdwn", "text": question},
+            "accessory": {
+                "type": type,
+                "options": [],
+                "action_id": "choice-action",
+            },
+        }
+    ]
+    for i, choice in enumerate(choices):
+        blocks[0]["accessory"]["options"].append(
+            {
+                "text": {
+                    "type": "plain_text",
+                    "text": choice,
+                    "emoji": True,
+                },
+                "value": f"value-{i}",
+            }
+        )
+    say(
+        text="Poll",
+        blocks=blocks,
+        channel=body["view"]["blocks"][-1]["text"]["text"],
+    )
+
+
+@slack_app.action("choice-action")
+def choiceHandler(ack, body):
+    ack()
+    blocks = body["message"]["blocks"]
+    action = body["state"]["values"]["poll"]["choice-action"]
+    type = action["type"]
+    blocks.append(
+        {
+            "type": "section",
+            "block_id": "response",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"<@{body['user']['id']}> chose ",
+            },
+        }
+    )
+    if type == "checkboxes":
+        selected_options = action["selected_options"]
+        for option in selected_options:
+            blocks[-1]["text"]["text"] += str(option["text"]["text"])
+    elif type == "radio":
+        blocks[-1]["text"]["text"] += str(option["text"]["text"])
+    slack_web_client.chat_update(
+        channel=body["channel"]["id"], ts=body["message"]["ts"], blocks=blocks
     )
 
 

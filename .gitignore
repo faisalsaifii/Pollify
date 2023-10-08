@@ -1,7 +1,7 @@
 .DS_Store
 .env
 .flaskenv
-*.pyc
+*.
 *.pyo
 env/
 venv/
@@ -23,3 +23,7 @@ htmlcov/
 .coverage
 .coverage.*
 *,cover
+
+__pycache__
+*.json
+Dockerfile
