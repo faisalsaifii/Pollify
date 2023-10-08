@@ -2,7 +2,7 @@
 
 Creates Polls like a Star
 
-![Logo](https://github.com/faisalsaifii/pollstar/blob/main/assets/Logo.svg)
+![Logo](https://raw.githubusercontent.com/faisalsaifii/pollstar/main/assets/Logo.png)
 
 ## Run Locally
 
