@@ -1,8 +1,11 @@
+import json
 from flask import request, Flask
 from slack_sdk import WebClient
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 import os
+import uuid
+import re
 
 app = Flask(__name__)
 bot_token = os.environ.get("SLACK_BOT_TOKEN")
@@ -78,14 +81,14 @@ def repeat_text(ack, body):
                 },
                 {
                     "type": "input",
-                    "block_id": "channel-id-input",
+                    "block_id": "channels",
                     "element": {
                         "type": "multi_channels_select",
                         "placeholder": {
                             "type": "plain_text",
                             "text": "Select channels",
                         },
-                        "action_id": "multi_static_select-action",
+                        "action_id": "channels-action",
                     },
                     "label": {
                         "type": "plain_text",
@@ -103,19 +106,24 @@ def handle_submission(ack, body, say):
     values = body["view"]["state"]["values"]
     type = values["type"]["multi_static_select-action"]["selected_option"]["value"]
     question = values["question"]["question-action"]["value"]
-    channel = values[""]
-    choices = str(values["choices"]["choices-action"]["value"]).split("\n")
+    channels = values["channels"]["channels-action"]["selected_channels"]
+    choices = str(values["choices"]["choices-action"]["value"]).strip().split("\n")
+    id = uuid.uuid4()
     blocks = [
         {
             "type": "section",
-            "block_id": "poll",
-            "text": {"type": "mrkdwn", "text": question},
+            "block_id": f"poll-{id}",
+            "text": {"type": "mrkdwn", "text": f"*{question}*"},
             "accessory": {
                 "type": type,
                 "options": [],
-                "action_id": "choice-action",
+                "action_id": f"choice-action-{id}",
             },
-        }
+        },
+        {
+            "type": "section",
+            "text": {"type": "mrkdwn", "text": "*Votes*"},
+        },
     ]
     for i, choice in enumerate(choices):
         blocks[0]["accessory"]["options"].append(
@@ -125,41 +133,66 @@ def handle_submission(ack, body, say):
                     "text": choice,
                     "emoji": True,
                 },
-                "value": f"value-{i}",
+                "value": str(i + 1),
             }
         )
-    say(
-        text="Poll",
-        blocks=blocks,
-        channel=channel,
-    )
+        blocks.append(
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"*{i+1}. {choice}*: "},
+            }
+        )
+    for channel in channels:
+        say(
+            text="Poll",
+            blocks=blocks,
+            channel=channel,
+        )
 
 
-@slack_app.action("choice-action")
-def choiceHandler(ack, body):
+@slack_app.action(re.compile("(.*?)"))
+def choiceHandler(ack, body, action):
     ack()
+    id = ("").join(action["block_id"].split("-")[1:])
+    block_id = action["block_id"]
     blocks = body["message"]["blocks"]
-    action = body["state"]["values"]["poll"]["choice-action"]
     type = action["type"]
-    blocks.append(
-        {
-            "type": "section",
-            "block_id": "response",
-            "text": {
-                "type": "mrkdwn",
-                "text": f"<@{body['user']['id']}> chose ",
-            },
-        }
-    )
     if type == "checkboxes":
         selected_options = action["selected_options"]
+        for block in blocks:
+            if f"{body['user']['id']}" in block["text"]["text"]:
+                block["text"]["text"] = block["text"]["text"].replace(
+                    f"<@{body['user']['id']}> ", ""
+                )
         for option in selected_options:
-            blocks[-1]["text"]["text"] += str(option["text"]["text"])
-    elif type == "radio":
-        blocks[-1]["text"]["text"] += str(option["text"]["text"])
-    slack_web_client.chat_update(
-        channel=body["channel"]["id"], ts=body["message"]["ts"], blocks=blocks
-    )
+            selected_value = option["value"]
+            for block in blocks:
+                value = block["text"]["text"][1]
+                if value == selected_value:
+                    block["text"]["text"] += f"<@{body['user']['id']}> "
+            slack_web_client.chat_update(
+                channel=body["channel"]["id"],
+                ts=body["message"]["ts"],
+                blocks=blocks,
+                text=body["message"]["text"],
+            )
+    if type == "radio_buttons":
+        selected_value = action["selected_option"]["value"]
+        for block in blocks:
+            if f"{body['user']['id']}" in block["text"]["text"]:
+                block["text"]["text"] = block["text"]["text"].replace(
+                    f"<@{body['user']['id']}> ", ""
+                )
+        for block in blocks:
+            value = block["text"]["text"][1]
+            if value == selected_value:
+                block["text"]["text"] += f"<@{body['user']['id']}> "
+        slack_web_client.chat_update(
+            channel=body["channel"]["id"],
+            ts=body["message"]["ts"],
+            blocks=blocks,
+            text=body["message"]["text"],
+        )
 
 
 @app.route("/", methods=["GET"])

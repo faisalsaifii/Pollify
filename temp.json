@@ -1,0 +1,132 @@
+{
+	"type": "block_actions",
+	"user": {
+		"id": "U05QR0B2P0V",
+		"username": "the.m.faisal.s",
+		"name": "the.m.faisal.s",
+		"team_id": "T05QWB00RMJ"
+	},
+	"api_app_id": "A05UHUQ37V5",
+	"token": "nJJrWnEFkxqypbT3VOPRe1ZG",
+	"container": {
+		"type": "message",
+		"message_ts": "1696792584.000929",
+		"channel_id": "C05QDBMJP3R",
+		"is_ephemeral": false
+	},
+	"trigger_id": "6001764748886.5846374025732.9da7300f1c60b994ec67acf81c219439",
+	"team": { "id": "T05QWB00RMJ", "domain": "faisalsaifi" },
+	"enterprise": null,
+	"is_enterprise_install": false,
+	"channel": { "id": "C05QDBMJP3R", "name": "app-testing" },
+	"message": {
+		"bot_id": "B05VB5UN9L1",
+		"type": "message",
+		"text": "Poll",
+		"user": "U05UYGJ31FU",
+		"ts": "1696792584.000929",
+		"app_id": "A05UHUQ37V5",
+		"blocks": [
+			{
+				"type": "section",
+				"block_id": "poll-b88157da-5288-4786-b4ca-99c1ec3db2a9",
+				"text": { "type": "mrkdwn", "text": "fsd", "verbatim": false },
+				"accessory": {
+					"type": "checkboxes",
+					"action_id": "choice-action-b88157da-5288-4786-b4ca-99c1ec3db2a9",
+					"options": [
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "sdfa",
+								"emoji": true
+							},
+							"value": "sdfa"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "sdfa",
+								"emoji": true
+							},
+							"value": "sdfa"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "afsd",
+								"emoji": true
+							},
+							"value": "afsd"
+						}
+					]
+				}
+			},
+			{
+				"type": "section",
+				"block_id": "xjB",
+				"text": {
+					"type": "mrkdwn",
+					"text": "<@U05QR0B2P0V> chose ",
+					"verbatim": false
+				}
+			}
+		],
+		"team": "T05QWB00RMJ",
+		"edited": { "user": "B05VB5UN9L1", "ts": "1696792586.000000" }
+	},
+	"state": {
+		"values": {
+			"poll-b88157da-5288-4786-b4ca-99c1ec3db2a9": {
+				"choice-action-b88157da-5288-4786-b4ca-99c1ec3db2a9": {
+					"type": "checkboxes",
+					"selected_options": [
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "sdfa",
+								"emoji": true
+							},
+							"value": "sdfa"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "afsd",
+								"emoji": true
+							},
+							"value": "afsd"
+						}
+					]
+				}
+			}
+		}
+	},
+	"response_url": "https://hooks.slack.com/actions/T05QWB00RMJ/6021044028241/TzIxLIUPbZsdtKn5rqjwfaCF",
+	"actions": [
+		{
+			"selected_options": [
+				{
+					"text": {
+						"type": "plain_text",
+						"text": "sdfa",
+						"emoji": true
+					},
+					"value": "sdfa"
+				},
+				{
+					"text": {
+						"type": "plain_text",
+						"text": "afsd",
+						"emoji": true
+					},
+					"value": "afsd"
+				}
+			],
+			"action_id": "choice-action-b88157da-5288-4786-b4ca-99c1ec3db2a9",
+			"block_id": "poll-b88157da-5288-4786-b4ca-99c1ec3db2a9",
+			"type": "checkboxes",
+			"action_ts": "1696792588.912259"
+		}
+	]
+}
