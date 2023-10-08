@@ -2,7 +2,13 @@
 
 Creates Polls like a Star
 
-![Logo](https://raw.githubusercontent.com/faisalsaifii/pollstar/main/assets/Logo.png)
+![Logo](./assets/Logo.svg)
+
+## Preview
+
+Uses the `/poll` command in slack
+
+![Preview](./assets/Preview.png)
 
 ## Run Locally
 

@@ -38,11 +38,7 @@ def repeat_text(ack, body):
                                 "value": "radio_buttons",
                             },
                             {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Multi Choice",
-                                    "emoji": True,
-                                },
+                                "text": {"type": "plain_text", "text": "Multi Choice"},
                                 "value": "checkboxes",
                             },
                         ],
@@ -51,7 +47,6 @@ def repeat_text(ack, body):
                     "label": {
                         "type": "plain_text",
                         "text": "Type of Poll",
-                        "emoji": True,
                     },
                 },
                 {
@@ -63,7 +58,6 @@ def repeat_text(ack, body):
                         "placeholder": {
                             "type": "plain_text",
                             "text": "Enter the question",
-                            "emoji": True,
                         },
                     },
                     "label": {"type": "plain_text", "text": "Question"},
@@ -78,17 +72,24 @@ def repeat_text(ack, body):
                         "placeholder": {
                             "type": "plain_text",
                             "text": "Enter the choices (Each on new line)",
-                            "emoji": True,
                         },
                     },
                     "label": {"type": "plain_text", "text": "Choices"},
                 },
                 {
-                    "type": "section",
-                    "block_id": "channel_id",
-                    "text": {
+                    "type": "input",
+                    "block_id": "channel-id-input",
+                    "element": {
+                        "type": "multi_channels_select",
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Select channels",
+                        },
+                        "action_id": "multi_static_select-action",
+                    },
+                    "label": {
                         "type": "plain_text",
-                        "text": body["channel_id"],
+                        "text": "Channels for the Poll",
                     },
                 },
             ],
@@ -102,6 +103,7 @@ def handle_submission(ack, body, say):
     values = body["view"]["state"]["values"]
     type = values["type"]["multi_static_select-action"]["selected_option"]["value"]
     question = values["question"]["question-action"]["value"]
+    channel = values[""]
     choices = str(values["choices"]["choices-action"]["value"]).split("\n")
     blocks = [
         {
@@ -129,7 +131,7 @@ def handle_submission(ack, body, say):
     say(
         text="Poll",
         blocks=blocks,
-        channel=body["view"]["blocks"][-1]["text"]["text"],
+        channel=channel,
     )
 
 
