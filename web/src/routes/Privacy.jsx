@@ -3,7 +3,7 @@ import React from 'react'
 const Privacy = () => {
 	return (
 		<div>
-			<h1>Privacy</h1>
+			<h1>Privacy Policy</h1>
 			<p>
 				We store no data, we only process it.
 				<br />

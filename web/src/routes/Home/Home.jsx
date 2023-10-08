@@ -26,6 +26,12 @@ const Home = () => {
 			>
 				Privacy Policy
 			</Link>
+			<Link
+				to={'/support'}
+				className='privacy-link'
+			>
+				Support
+			</Link>
 		</div>
 	)
 }
