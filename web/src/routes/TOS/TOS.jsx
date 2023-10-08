@@ -33,8 +33,8 @@ const TOS = () => {
 							such modifications.
 						</li>
 						<li>
-							The mark Polly and the Polly logo are trademarks of
-							Subcurrent, Inc.
+							The mark PollStar and the Poll Star logo are
+							trademarks of Subcurrent, Inc.
 						</li>
 					</ul>
 				</div>
