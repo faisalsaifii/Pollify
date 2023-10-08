@@ -25,5 +25,3 @@ htmlcov/
 *,cover
 
 __pycache__
-*.json
-Dockerfile
