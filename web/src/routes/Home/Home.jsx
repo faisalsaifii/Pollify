@@ -20,18 +20,26 @@ const Home = () => {
 					/>
 				</a>
 			</div>
-			<Link
-				to={'/privacy'}
-				className='privacy-link'
-			>
-				Privacy Policy
-			</Link>
-			<Link
-				to={'/support'}
-				className='privacy-link'
-			>
-				Support
-			</Link>
+			<div className='links'>
+				<Link
+					to={'/privacy'}
+					className='privacy-link'
+				>
+					Privacy Policy
+				</Link>
+				<Link
+					to={'/support'}
+					className='privacy-link'
+				>
+					Support
+				</Link>
+				<Link
+					to={'/terms-of-service'}
+					className='privacy-link'
+				>
+					Terms of Service
+				</Link>
+			</div>
 		</div>
 	)
 }
