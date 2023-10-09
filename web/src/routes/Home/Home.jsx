@@ -4,12 +4,11 @@ import './Home.css'
 const Home = () => {
 	return (
 		<div className='main'>
-			<h1>Poll Star</h1>
-			<p>Creates Polls like a Star</p>
-			<img
-				src='https://i.ibb.co/RNGK4qq/Logo.png'
+			<h1>Pollify</h1>
+			<p>Amplify the process of decision-making</p>
+			{/* <img
 				width={200}
-			/>
+			/> */}
 			<div className='slack-btn-container'>
 				<a href='https://slack.com/oauth/v2/authorize?client_id=5846374025732.5969976109991&scope=commands,chat:write&user_scope='>
 					<img
