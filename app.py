@@ -3,13 +3,29 @@ from flask import redirect, request, Flask
 from slack_sdk import WebClient
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
+from slack_bolt.oauth.oauth_settings import OAuthSettings
+from slack_sdk.oauth.installation_store import FileInstallationStore
+from slack_sdk.oauth.state_store import FileOAuthStateStore
 import os
 import uuid
 import re
 
 app = Flask(__name__)
 bot_token = os.environ.get("SLACK_BOT_TOKEN")
-slack_app = App(token=bot_token, signing_secret=os.environ.get("SLACK_SIGNING_SECRET"))
+
+oauth_settings = OAuthSettings(
+    client_id=os.environ["SLACK_CLIENT_ID"],
+    client_secret=os.environ["SLACK_CLIENT_SECRET"],
+    scopes=["commands", "chat:write"],
+    installation_store=FileInstallationStore(base_dir="./data/installations"),
+    state_store=FileOAuthStateStore(expiration_seconds=600, base_dir="./data/states"),
+)
+
+slack_app = App(
+    token=bot_token,
+    signing_secret=os.environ.get("SLACK_SIGNING_SECRET"),
+    oauth_settings=oauth_settings,
+)
 slack_web_client = WebClient(token=bot_token)
 handler = SlackRequestHandler(slack_app)
 
