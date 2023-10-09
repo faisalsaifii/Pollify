@@ -1,8 +1,8 @@
-import React from 'react'
+import './TOS.css'
 
 const TOS = () => {
 	return (
-		<div>
+		<div className='tos-container'>
 			<h1>Terms of Service</h1>
 			<div>
 				<div>
