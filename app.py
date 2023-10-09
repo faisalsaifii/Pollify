@@ -211,15 +211,6 @@ def choiceHandler(ack, body, action):
         )
 
 
-@app.route("/install")
-def install():
-    return redirect(
-        location="https://slack.com/oauth/v2/authorize?client_id=5846374025732.5969976109991&scope=chat:write,commands&user_scope=",
-        # code=302,
-        Response={"success": True},
-    )
-
-
 @app.route("/", methods=["GET"])
 def index():
     return "Pollify"
@@ -227,4 +218,14 @@ def index():
 
 @app.route("/slack/events", methods=["POST"])
 def slack_events():
+    return handler.handle(request)
+
+
+@app.route("/slack/install", methods=["GET"])
+def install():
+    return handler.handle(request)
+
+
+@app.route("/slack/oauth_redirect", methods=["GET"])
+def oauth_redirect():
     return handler.handle(request)
