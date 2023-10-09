@@ -1,5 +1,5 @@
 import json
-from flask import request, Flask
+from flask import redirect, request, Flask
 from slack_sdk import WebClient
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
@@ -195,9 +195,16 @@ def choiceHandler(ack, body, action):
         )
 
 
+@app.route("/install")
+def install():
+    return redirect(
+        "https://slack.com/oauth/v2/authorize?client_id=5846374025732.5969976109991&scope=chat:write,commands&user_scope="
+    )
+
+
 @app.route("/", methods=["GET"])
 def index():
-    return "Poll Star"
+    return "Pollify"
 
 
 @app.route("/slack/events", methods=["POST"])
