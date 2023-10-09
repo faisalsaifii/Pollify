@@ -1,14 +1,10 @@
-# PollStar
+# Pollify
 
-Creates Polls like a Star
-
-![Logo](https://i.ibb.co/RNGK4qq/Logo.png)
+Amplify the process of decision-making
 
 ## Preview
 
 Uses the `/poll` command in slack
-
-![Preview](https://i.ibb.co/KqG39nz/Screenshot-2023-10-08-at-11-37-33-PM.png)
 
 ## Run Locally
 
