@@ -198,7 +198,9 @@ def choiceHandler(ack, body, action):
 @app.route("/install")
 def install():
     return redirect(
-        "https://slack.com/oauth/v2/authorize?client_id=5846374025732.5969976109991&scope=chat:write,commands&user_scope="
+        location="https://slack.com/oauth/v2/authorize?client_id=5846374025732.5969976109991&scope=chat:write,commands&user_scope=",
+        # code=302,
+        Response={"success": True},
     )
 
 
