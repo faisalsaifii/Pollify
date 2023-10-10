@@ -1,4 +1,7 @@
-flask==2.2.2
+Flask
 slack_bolt
 gunicorn
+pymongo
 uuid
+Werkzeug==2.2.2
+python-dotenv
