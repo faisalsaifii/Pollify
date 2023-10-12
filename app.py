@@ -1,45 +1,46 @@
-from flask import request, Flask, redirect
-from slack_sdk import WebClient
+from flask import request, Flask
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 from slack_bolt.oauth.oauth_settings import OAuthSettings
+from slack_bolt.oauth.oauth_flow import OAuthFlow
 from mongodb_installation_store import MongoDBInstallationStore
 from pymongo import MongoClient
-from slack_sdk.oauth.installation_store import FileInstallationStore
-from slack_sdk.oauth.state_store import FileOAuthStateStore
 import os
 import uuid
 import re
 
 
 app = Flask(__name__)
-bot_token = os.environ.get("SLACK_BOT_TOKEN")
 mongo_uri = os.environ.get("MONGO_URI")
-client = MongoClient(mongo_uri)
-db = client["slack"]
+mongo_client = MongoClient(mongo_uri)
+db = mongo_client["slack"]
 collection = db["installations"]
 client_id = os.environ["SLACK_CLIENT_ID"]
 client_secret = os.environ["SLACK_CLIENT_SECRET"]
+
 
 oauth_settings = OAuthSettings(
     client_id=client_id,
     client_secret=client_secret,
     scopes=["commands", "chat:write"],
-    installation_store=MongoDBInstallationStore(client=client, database="slack"),
+    user_scopes=[],
+    installation_store=MongoDBInstallationStore(
+        client=mongo_client, database="slack", client_id=client_id
+    ),
 )
 
+oauth_flow = OAuthFlow(settings=oauth_settings)
+
 slack_app = App(
-    signing_secret=os.environ.get("SLACK_SIGNING_SECRET"),
-    oauth_settings=oauth_settings,
+    signing_secret=os.environ.get("SLACK_SIGNING_SECRET"), oauth_flow=oauth_flow
 )
-slack_web_client = WebClient(token=bot_token)
 handler = SlackRequestHandler(slack_app)
 
 
 @slack_app.command("/poll")
-def repeat_text(ack, body):
+def repeat_text(ack, body, client):
     ack()
-    slack_web_client.views_open(
+    client.views_open(
         trigger_id=body["trigger_id"],
         view={
             "type": "modal",
@@ -173,7 +174,7 @@ def handle_submission(ack, body, say):
 
 
 @slack_app.action(re.compile("(.*?)"))
-def choiceHandler(ack, body, action):
+def choiceHandler(ack, body, action, client):
     ack()
     id = ("").join(action["block_id"].split("-")[1:])
     block_id = action["block_id"]
@@ -192,7 +193,7 @@ def choiceHandler(ack, body, action):
                 value = block["text"]["text"][1]
                 if value == selected_value:
                     block["text"]["text"] += f"<@{body['user']['id']}> "
-            slack_web_client.chat_update(
+            client.chat_update(
                 channel=body["channel"]["id"],
                 ts=body["message"]["ts"],
                 blocks=blocks,
@@ -209,7 +210,7 @@ def choiceHandler(ack, body, action):
             value = block["text"]["text"][1]
             if value == selected_value:
                 block["text"]["text"] += f"<@{body['user']['id']}> "
-        slack_web_client.chat_update(
+        client.chat_update(
             channel=body["channel"]["id"],
             ts=body["message"]["ts"],
             blocks=blocks,
