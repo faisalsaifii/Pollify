@@ -5,7 +5,6 @@ from slack_bolt.oauth.oauth_settings import OAuthSettings
 from slack_bolt.oauth.oauth_flow import OAuthFlow
 from mongodb_installation_store import MongoDBInstallationStore
 from pymongo import MongoClient
-from langchain.chat_models import AzureChatOpenAI
 import os
 import uuid
 import re

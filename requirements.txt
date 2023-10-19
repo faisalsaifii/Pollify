@@ -3,4 +3,3 @@ slack_bolt
 gunicorn
 pymongo
 uuid
-langchain==0.0.272
