@@ -1,10 +1,11 @@
-from flask import request, Flask
+from flask import render_template, request, Flask
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 from slack_bolt.oauth.oauth_settings import OAuthSettings
 from slack_bolt.oauth.oauth_flow import OAuthFlow
 from mongodb_installation_store import MongoDBInstallationStore
 from pymongo import MongoClient
+from langchain.chat_models import AzureChatOpenAI
 import os
 import uuid
 import re
@@ -220,7 +221,22 @@ def choiceHandler(ack, body, action, client):
 
 @app.route("/", methods=["GET"])
 def index():
-    return "Pollify"
+    return render_template("index.html")
+
+
+@app.route("/tos", methods=["GET"])
+def tos():
+    return render_template("tos.html")
+
+
+@app.route("/privacy", methods=["GET"])
+def privacy():
+    return render_template("privacy.html")
+
+
+@app.route("/support", methods=["GET"])
+def support():
+    return render_template("support.html")
 
 
 @app.route("/slack/events", methods=["POST"])
