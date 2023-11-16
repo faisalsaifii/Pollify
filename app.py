@@ -8,8 +8,9 @@ from pymongo import MongoClient
 import os
 import uuid
 import re
+from dotenv import load_dotenv
 
-
+load_dotenv()
 app = Flask(__name__)
 mongo_uri = os.environ.get("MONGO_URI")
 mongo_client = MongoClient(mongo_uri)
@@ -17,7 +18,6 @@ db = mongo_client["slack"]
 collection = db["installations"]
 client_id = os.environ["SLACK_CLIENT_ID"]
 client_secret = os.environ["SLACK_CLIENT_SECRET"]
-
 
 oauth_settings = OAuthSettings(
     client_id=client_id,

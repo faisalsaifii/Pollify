@@ -33,7 +33,7 @@
               (python.withPackages (ps: with ps; [
                 flask
                 slack-bolt
-                gunicorn
+                python-dotenv
                 pymongo
                 uuid
               ]))
