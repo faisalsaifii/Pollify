@@ -3,14 +3,13 @@
 body {
 	--bg-color: #000000;
 	--fg-color: #ffffff;
-	font-family: 'Poppins', sans-serif;
 	background-color: var(--bg-color);
 	color: var(--fg-color);
-	height: 100dvh;
 	margin: 0;
 }
 
 * {
+	font-family: 'Poppins', sans-serif;
 	text-decoration: none;
 	color: var(--fg-color);
 }
@@ -24,6 +23,7 @@ body {
 
 .nav-link {
 	padding: 20px;
+	font-weight: bold;
 }
 
 .content {
@@ -37,4 +37,13 @@ body {
 h1 {
 	font-size: 102px;
 	margin-bottom: 0px;
+}
+
+.content-body {
+	margin-inline: 10%;
+	margin-block: 30px;
+	font-weight: lighter;
+	background-color: #373737;
+	padding: 25px;
+	border-radius: 10px;
 }

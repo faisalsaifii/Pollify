@@ -5,10 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/index.css') }}">
+    <meta name="slack-app-id" content="A05UHUQ37V5">
 </head>
 
 <body>
-    <h1>Terms of Service</h1>
+    <nav class="navbar">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/support" class="nav-link">Support</a>
+        <a href="/privacy" class="nav-link">Privacy Policy</a>
+        <a href="/tos" class="nav-link">Terms of Service</a>
+        <a href="/slack/install" class="nav-link">Install to Workspace</a>
+    </nav>
+    <div class="content">
+        <h1>Terms of Service</h1>
+        <p class="content-body"></p>
+    </div>
 </body>
 
 </html>
