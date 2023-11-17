@@ -3,3 +3,4 @@ slack_bolt
 gunicorn
 pymongo
 uuid
+dotenv
