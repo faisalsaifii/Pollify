@@ -38,10 +38,6 @@
                 uuid
               ]))
             ];
-
-            shellHook = ''
-              FLASK_APP=app.py python3 -m flask --debug run -p 5001
-            '';
           };
       });
     };
