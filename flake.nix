@@ -29,8 +29,10 @@
           pkgs.mkShell {
             # The Nix packages provided in the environment
             packages = [
+              pkgs.git
               # Python plus helper tools
               (python.withPackages (ps: with ps; [
+                pip
                 flask
                 slack-bolt
                 python-dotenv
